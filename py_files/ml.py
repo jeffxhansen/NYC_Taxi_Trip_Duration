@@ -1,4 +1,5 @@
 import xgboost as xgb
+from catboost import CatBoostClassifier
 
 def train_model(model, X_train, y_train, params=None):
     
