@@ -1,9 +1,5 @@
 import pandas as pd
 from config import data_path
-<<<<<<< HEAD
-
-=======
->>>>>>> 50fe2742433a1143f783676491579b9b8e5308bb
 
 def get_data():
 
