@@ -1,6 +1,9 @@
 import pandas as pd
 from config import data_path
+<<<<<<< HEAD
 
+=======
+>>>>>>> 50fe2742433a1143f783676491579b9b8e5308bb
 
 def get_data():
 
@@ -10,6 +13,8 @@ def get_data():
     personal_health_df = pd.read_csv(f"{data_path}/data/personal_health_data.csv")
     digital_interaction_df = pd.read_csv(f"{data_path}/data/digital_interaction_data.csv")
     print('Successfully loaded in the data.')
+    
+    return activity_environment_df, personal_health_df, digital_interaction_df
     
     # merge the dataframes
     merge_df = pd.merge(activity_environment_df, personal_health_df, on="User_ID", validate="one_to_one")

@@ -1,5 +1,9 @@
 # WearableHealthPredictor
 
+# Dataset link
+
+https://www.kaggle.com/datasets/manideepreddy966/wearables-dataset
+
 # project outline
 
 * py_files/data_manager.py
@@ -14,6 +18,8 @@
         * train()
         * test()
         * create_model()
+* py_files/helper_funcs.py
+    * this will contain miscelaneous function that are used for many of the py files. They generally handle general-logic things
 * config.py
     * all hyperparameters and constants for all of our code
         * features_toggle - a dictionary with True/False toggles that specify which features we will use
@@ -31,7 +37,3 @@
     * jason's personal notebook where they do all of their development and analysis before adding to the py files
 * dallin.ipynb
     * dallin's personal notebook where they do all of their development and analysis before adding to the py files
-
-# Dataset link
-
-https://www.kaggle.com/datasets/manideepreddy966/wearables-dataset

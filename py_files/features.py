@@ -1,3 +1,5 @@
+from config import features_toggle
+
 
 def generate_features(df):
     
