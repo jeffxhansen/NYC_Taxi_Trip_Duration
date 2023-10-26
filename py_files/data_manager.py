@@ -5,9 +5,9 @@ def get_data():
 
     
     # load the csvs
-    activity_environment_df = pd.read_csv(f"{data_path}/data/activity_environment_data.csv")  
-    personal_health_df = pd.read_csv(f"{data_path}/data/personal_health_data.csv")
-    digital_interaction_df = pd.read_csv(f"{data_path}/data/digital_interaction_data.csv")
+    activity_environment_df = pd.read_csv(f"{data_path}/activity_environment_data.csv")  
+    personal_health_df = pd.read_csv(f"{data_path}/personal_health_data.csv")
+    digital_interaction_df = pd.read_csv(f"{data_path}/digital_interaction_data.csv")
     print('Successfully loaded in the data.')
     
     return activity_environment_df, personal_health_df, digital_interaction_df
