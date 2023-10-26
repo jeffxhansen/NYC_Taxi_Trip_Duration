@@ -3,6 +3,8 @@ features_toggle = {
     
 }
 
+data_path = "./data"
+
 TRAIN_TEST_SPLIT = 0.8
 
 # display parameters

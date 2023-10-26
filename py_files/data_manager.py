@@ -1,4 +1,5 @@
 import pandas as pd
+from config import data_path
 
 def get_data():
     
