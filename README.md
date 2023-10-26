@@ -14,6 +14,8 @@
         * train()
         * test()
         * create_model()
+* py_files/helper_funcs.py
+    * this will contain miscelaneous function that are used for many of the py files. They generally handle general-logic things
 * config.py
     * all hyperparameters and constants for all of our code
         * features_toggle - a dictionary with True/False toggles that specify which features we will use
