@@ -1,5 +1,9 @@
 # WearableHealthPredictor
 
+# Dataset link
+
+https://www.kaggle.com/datasets/manideepreddy966/wearables-dataset
+
 # project outline
 
 * py_files/data_manager.py
@@ -33,7 +37,3 @@
     * jason's personal notebook where they do all of their development and analysis before adding to the py files
 * dallin.ipynb
     * dallin's personal notebook where they do all of their development and analysis before adding to the py files
-
-# Dataset link
-
-https://www.kaggle.com/datasets/manideepreddy966/wearables-dataset
