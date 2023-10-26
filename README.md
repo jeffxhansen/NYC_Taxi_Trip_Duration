@@ -2,14 +2,14 @@
 
 # project outline
 
-* data_manager.py
+* py_files/data_manager.py
     * this will be the py file with functions like:
         * get_data() - that pulls in the merged csvs
         * get_cleaned_data() - handles any data cleaning
-* features.py
+* py_files/features.py
     * this will handle all of the features logic
         * generate_features() - takes in a cleaned dataframe and adds all of the feature columns
-* ml.py
+* py_files/ml.py
     * this will handle all of the machine learning logic
         * train()
         * test()
