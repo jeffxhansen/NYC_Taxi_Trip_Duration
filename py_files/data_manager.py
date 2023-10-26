@@ -21,7 +21,7 @@ def save_merged_data(verbose=False):
     if verbose: print('Successfully merged the dataframes.')
     
     # save the health_df (the merged data)
-    health_df.to_csv(f"{data_path}/health_data.csv")
+    health_df.to_csv(f"{data_path}/health_data.csv", index=False)
     if verbose: print('Successfully saved the merged dataframe.')
     
     return health_df
@@ -64,7 +64,7 @@ def clean_health_df():
         health_df[col] = health_df[col].map(mapping).astype(int)
         
     # save the cleaned health_df
-    health_df.to_csv(f"{data_path}/health_data_clean.csv")
+    health_df.to_csv(f"{data_path}/health_data_clean.csv", index=False)
     
     return health_df
     
