@@ -5,7 +5,7 @@ from config import (
 )
 import os
 
-def save_merged_data():
+def save_merged_data(verbose=False):
     """loads in the csvs, merges them, and saves the merged 
     dataframe as a csv. Returns the merged dataframe
     """
@@ -13,14 +13,16 @@ def save_merged_data():
     activity_environment_df = pd.read_csv(f"{data_path}/activity_environment_data.csv")  
     personal_health_df = pd.read_csv(f"{data_path}/personal_health_data.csv")
     digital_interaction_df = pd.read_csv(f"{data_path}/digital_interaction_data.csv")
-    print('Successfully loaded in the data.')
+    if verbose: print('Successfully loaded in the data.')
 
     # merge all of the above dataframes on User_ID
     merged_df = activity_environment_df.merge(personal_health_df, on='User_ID')
     health_df = merged_df.merge(digital_interaction_df, on='User_ID')
+    if verbose: print('Successfully merged the dataframes.')
     
     # save the health_df (the merged data)
     health_df.to_csv(f"{data_path}/health_data.csv")
+    if verbose: print('Successfully saved the merged dataframe.')
     
     return health_df
 
