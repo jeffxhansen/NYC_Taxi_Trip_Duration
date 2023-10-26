@@ -2,8 +2,6 @@ import pandas as pd
 from config import data_path
 
 def get_data():
-
-    print(data_path)
     
     # load the csvs
     activity_environment_df = pd.read_csv(f"{data_path}/activity_environment_data.csv")  
