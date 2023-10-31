@@ -3,54 +3,8 @@
 # DATA CLEANING
 #################
 
-cols_to_drop = [
-    'User_ID', 'Timestamp_x', 'Battery_Level', 
-    'Timestamp_y', 'Timestamp', 'Anomaly_Flag', 
-    'Screen_Time', 'Notifications_Received', 'Day_of_Week']
-
-nan_columns = [
-    'Exercise_Type', 'Exercise_Intensity', 'Medical_Conditions', 
-    'Alcohol_Consumption', 'Stress_Level', 'Mood']
-
-dummy_cols = ['Exercise_Type', 'Gender', 'Medical_Conditions', 'Mood']
-
-ordinal_mapping = {
-    'Exercise_Intensity': {
-        'None': 0,
-        'Low': 1,
-        'Moderate': 2,
-        'High': 3
-    },
-    'Alcohol_Consumption': {
-        'None': 0,
-        'Moderate': 1,
-        'Heavy': 2
-    },
-    'Stress_Level': {
-        'Low': 1,
-        'Moderate': 2,
-        'High': 3
-    }
-}
-
-binary_mapping = {
-    "ECG": {
-        'Abnormal': 0,
-        'Normal': 1
-    }, 
-    "Snoring": {
-        'No': 0,
-        'Yes': 1
-    },
-    "Smoker": {
-        'No': 0,
-        'Yes': 1
-    },
-    "Medication": {
-        'No': 0,
-        'Yes': 1
-    }
-}
+cols_to_drop = ['id', 'store_and_fwd_flag', 'dropoff_datetime']
+SET_VENDOR_ID_TO_01 = True
 
 #######################
 # FEATURES PARAMETERS

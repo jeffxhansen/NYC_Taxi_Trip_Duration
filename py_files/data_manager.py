@@ -1,79 +1,67 @@
 import pandas as pd
 from config import (
-    data_path, cols_to_drop, nan_columns,
-    dummy_cols, ordinal_mapping, binary_mapping   
+    data_path, cols_to_drop, SET_VENDOR_ID_TO_01
 )
+from py_files.helper_funcs import p
 import os
 
-def save_merged_data(verbose=False):
-    """loads in the csvs, merges them, and saves the merged 
-    dataframe as a csv. Returns the merged dataframe
+def clean_data(df, df_name, verbose=False):
+    """loads in the train.csv and test.csv and cleans them according
+    to the constants in config.py. Saves the cleaned dataframes as
+    train_clean.csv and test_clean.csv
     """
-    # load the csvs
-    activity_environment_df = pd.read_csv(f"{data_path}/activity_environment_data.csv")  
-    personal_health_df = pd.read_csv(f"{data_path}/personal_health_data.csv")
-    digital_interaction_df = pd.read_csv(f"{data_path}/digital_interaction_data.csv")
-    if verbose: print('Successfully loaded in the data.')
-
-    # merge all of the above dataframes on User_ID
-    merged_df = activity_environment_df.merge(personal_health_df, on='User_ID')
-    health_df = merged_df.merge(digital_interaction_df, on='User_ID')
-    if verbose: print('Successfully merged the dataframes.')
+    # only keep the relevant columns based on the config
+    p("dropping columns") if verbose else None
+    curr_cols_to_drop = [c for c in df.columns if c in cols_to_drop]
+    df_clean = df.drop(columns=curr_cols_to_drop)
+    p() if verbose else None
     
-    # save the health_df (the merged data)
-    health_df.to_csv(f"{data_path}/health_data.csv", index=False)
-    if verbose: print('Successfully saved the merged dataframe.')
+    # setting vendor_id to a 0 or 1 instead of 1 and 2
+    if SET_VENDOR_ID_TO_01:
+        p("setting vendor_id to 0 or 1") if verbose else None
+        df_clean['vendor_id'] = df_clean['vendor_id'] - 1
+        p() if verbose else None
     
-    return health_df
-
-def get_health_data():
-    """either creates the merged dataframe from the separate csvs
+    # other cleaning
+    # ...
+    
+    # save the cleaned dataframe
+    p("saving cleaned dataframe") if verbose else None
+    df_clean.to_csv(f"{data_path}/{df_name}_clean.csv", index=False)
+    p() if verbose else None
+    
+    return df_clean
+    
+    
+def get_train_data():
+    """either creates the cleaned train dataframe from the train.csv
     or it loads it from the data folder
     """
-    if not os.path.exists(f"{data_path}/health_data.csv"):
-        return save_merged_data()
+    if not os.path.exists(f"{data_path}/train_clean.csv"):
+        train = pd.read_csv(f"{data_path}/train.csv")
+        return clean_data(train, 'train')
     else:
-        return pd.read_csv(f"{data_path}/health_data.csv")
+        return pd.read_csv(f"{data_path}/train_clean.csv")
     
-def clean_health_df():
-    """cleans the health_df and saves it as a csv. Returns the cleaned
-    health_df
+def get_X_y(return_np=False):
+    """returns the X and y dataframes from a dataframe
     """
-    # load in the health_df
-    health_df = get_health_data()
+    df = get_train_data()
+    X = df.drop(columns=['trip_duration'])
+    y = df['trip_duration']
     
-    # drop the columns that we don't need
-    health_df = health_df.drop(cols_to_drop, axis=1)
-    
-    # fill the columns with NaNs with the string 'None'
-    for col in nan_columns:
-        health_df[col] = health_df[col].fillna('None')
+    if return_np:
+        X, y = X.values, y.values
         
-    # dummy encode the categorical columns
-    health_df = pd.get_dummies(health_df, columns=dummy_cols)
-    new_dummy_cols = [col for col in health_df.columns if any([c in col for c in dummy_cols])]
-    for col in new_dummy_cols:
-        health_df[col] = health_df[col].astype(int)
-        
-    # map columns with an order to the categories to ints
-    for col, mapping in ordinal_mapping.items():
-        health_df[col] = health_df[col].map(mapping)
-        
-    # map binary categorical columns to ints
-    for col, mapping in binary_mapping.items():
-        health_df[col] = health_df[col].map(mapping).astype(int)
-        
-    # save the cleaned health_df
-    health_df.to_csv(f"{data_path}/health_data_clean.csv", index=False)
-    
-    return health_df
-    
-    
-def get_cleaned_data():
-    """either creates the cleaned dataframe, saves and returns it
+    return X, y
+
+
+def get_test_data():
+    """either creates the cleaned test dataframe from the test.csv
     or it loads it from the data folder
     """
-    if not os.path.exists(f"{data_path}/health_data_clean.csv"):
-        return clean_health_df()
+    if not os.path.exists(f"{data_path}/test_clean.csv"):
+        test = pd.read_csv(f"{data_path}/test.csv")
+        return clean_data(test, 'test')
     else:
-        return pd.read_csv(f"{data_path}/health_data_clean.csv")
+        return pd.read_csv(f"{data_path}/test_clean.csv")
