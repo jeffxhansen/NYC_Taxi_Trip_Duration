@@ -1,8 +1,8 @@
-# WearableHealthPredictor
+# NYC_Taxi_Trip_Duration Predictor
 
 # Dataset link
 
-https://www.kaggle.com/datasets/manideepreddy966/wearables-dataset
+https://www.kaggle.com/competitions/nyc-taxi-trip-duration/overview
 
 # project outline
 
@@ -37,3 +37,6 @@ https://www.kaggle.com/datasets/manideepreddy966/wearables-dataset
     * jason's personal notebook where they do all of their development and analysis before adding to the py files
 * dallin.ipynb
     * dallin's personal notebook where they do all of their development and analysis before adding to the py files
+
+
+
