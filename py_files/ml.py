@@ -1,5 +1,4 @@
 import xgboost as xgb
-from catboost import CatBoostClassifier
 
 def train_model(model, X_train, y_train, params=None):
     
@@ -24,9 +23,9 @@ def test_model(model, X_test, y_test, params=None):
 def create_model(params=None):
     
     if params is None:
-        model = xgb.XGBClassifier()
+        model = xgb.XGBRegressor()
     else:
-        model = xgb.XGBClassifier(**params)
+        model = xgb.XGBRegressor(**params)
         
     return model
     
