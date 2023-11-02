@@ -4,6 +4,7 @@ from config import (
 )
 from py_files.helper_funcs import p
 import os
+import numpy as np
 
 def clean_data(df, df_name, verbose=False):
     """loads in the train.csv and test.csv and cleans them according
@@ -22,6 +23,21 @@ def clean_data(df, df_name, verbose=False):
         df_clean['vendor_id'] = df_clean['vendor_id'] - 1
         p() if verbose else None
     
+    # Split apart pickup_datetime
+    df_clean['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'])
+    df_clean['pickup_month'] = df_clean['pickup_datetime'].dt.month
+    df_clean['pickup_day'] = df_clean['pickup_datetime'].dt.day_name()
+    df_clean = pd.get_dummies(df_clean, columns=['pickup_day'], drop_first=True)
+    df_clean['pickup_hour'] = df_clean['pickup_datetime'].dt.hour
+    df_clean['pickup_minute'] = df_clean['pickup_datetime'].dt.minute
+
+    # Create a pickup period.
+    df_clean['pickup_period'] = pd.cut(df_clean['pickup_hour'], bins=[-1, 6, 12, 18, 24], labels=['night', 'morning', 'afternoon', 'evening'])
+
+    # Add cyclic data.
+    df_clean['pickup_hour_sin'] = np.sin(2 * np.pi * df_clean['pickup_hour'] / 24)
+    df_clean['pickup_hour_cos'] = np.cos(2 * np.pi * df_clean['pickup_hour'] / 24)
+
     # convert pickup and dropoff times to floats from 0 to 1
     df_clean['pickup_datetime'] = pd.to_datetime(df_clean['pickup_datetime']).astype('int64') // 10**9
     df_clean['pickup_datetime'] = (df_clean['pickup_datetime'] - df_clean['pickup_datetime'].min()) / (df_clean['pickup_datetime'].max() - df_clean['pickup_datetime'].min())
