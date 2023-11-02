@@ -4,6 +4,9 @@
 
 https://www.kaggle.com/competitions/nyc-taxi-trip-duration/overview
 
+Weather:
+https://www.kaggle.com/datasets/aadimator/nyc-weather-2016-to-2022
+
 # project outline
 
 * py_files/data_manager.py
