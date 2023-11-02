@@ -12,7 +12,7 @@ SET_VENDOR_ID_TO_01 = True
 
 
 features_toggle = {
-    
+    'distance': True
 }
 
 #########

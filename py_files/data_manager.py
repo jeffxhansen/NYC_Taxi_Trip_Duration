@@ -22,8 +22,9 @@ def clean_data(df, df_name, verbose=False):
         df_clean['vendor_id'] = df_clean['vendor_id'] - 1
         p() if verbose else None
     
-    # other cleaning
-    # ...
+    # convert pickup and dropoff times to floats from 0 to 1
+    df_clean['pickup_datetime'] = pd.to_datetime(df_clean['pickup_datetime']).astype('int64') // 10**9
+    df_clean['pickup_datetime'] = (df_clean['pickup_datetime'] - df_clean['pickup_datetime'].min()) / (df_clean['pickup_datetime'].max() - df_clean['pickup_datetime'].min())
     
     # save the cleaned dataframe
     p("saving cleaned dataframe") if verbose else None
@@ -33,20 +34,20 @@ def clean_data(df, df_name, verbose=False):
     return df_clean
     
     
-def get_train_data():
+def get_train_data(force_clean=False):
     """either creates the cleaned train dataframe from the train.csv
     or it loads it from the data folder
     """
-    if not os.path.exists(f"{data_path}/train_clean.csv"):
+    if not os.path.exists(f"{data_path}/train_clean.csv") or force_clean:
         train = pd.read_csv(f"{data_path}/train.csv")
         return clean_data(train, 'train')
     else:
         return pd.read_csv(f"{data_path}/train_clean.csv")
     
-def get_X_y(return_np=False):
+def get_X_y(return_np=False, force_clean=False):
     """returns the X and y dataframes from a dataframe
     """
-    df = get_train_data()
+    df = get_train_data(force_clean=force_clean)
     X = df.drop(columns=['trip_duration'])
     y = df['trip_duration']
     
