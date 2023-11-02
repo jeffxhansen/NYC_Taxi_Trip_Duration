@@ -3,6 +3,10 @@ data/*.zip
 
 data/*.geojson
 
+data/*
+
+!data/.gitkeep
+
 # Ignore .pyc files
 *.pyc
 
