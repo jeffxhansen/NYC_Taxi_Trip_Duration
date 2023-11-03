@@ -1,6 +1,7 @@
 import pandas as pd
 from config import (
-    data_path, cols_to_drop, SET_VENDOR_ID_TO_01
+    data_path, cols_to_drop, SET_VENDOR_ID_TO_01, 
+    PICKUP_TIME_TO_NORMALIZED_FLOAT
 )
 from py_files.helper_funcs import p
 import os
@@ -39,9 +40,10 @@ def clean_data(df, df_name, verbose=False):
     df_clean['pickup_hour_cos'] = np.cos(2 * np.pi * df_clean['pickup_hour'] / 24)
 
     # convert pickup and dropoff times to floats from 0 to 1
-    df_clean['pickup_datetime'] = pd.to_datetime(df_clean['pickup_datetime']).astype('int64') // 10**9
-    df_clean['pickup_datetime'] = (df_clean['pickup_datetime'] - df_clean['pickup_datetime'].min()) / (df_clean['pickup_datetime'].max() - df_clean['pickup_datetime'].min())
-    
+    if PICKUP_TIME_TO_NORMALIZED_FLOAT:
+        df_clean['pickup_datetime'] = pd.to_datetime(df_clean['pickup_datetime']).astype('int64') // 10**9
+        df_clean['pickup_datetime'] = (df_clean['pickup_datetime'] - df_clean['pickup_datetime'].min()) / (df_clean['pickup_datetime'].max() - df_clean['pickup_datetime'].min())
+        
     # save the cleaned dataframe
     p("saving cleaned dataframe") if verbose else None
     df_clean.to_csv(f"{data_path}/{df_name}_clean.csv", index=False)
