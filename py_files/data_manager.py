@@ -39,8 +39,8 @@ def clean_data(df, df_name, verbose=False):
     df_clean['pickup_hour_cos'] = np.cos(2 * np.pi * df_clean['pickup_hour'] / 24)
 
     # convert pickup and dropoff times to floats from 0 to 1
-    df_clean['pickup_datetime'] = pd.to_datetime(df_clean['pickup_datetime']).astype('int64') // 10**9
-    df_clean['pickup_datetime'] = (df_clean['pickup_datetime'] - df_clean['pickup_datetime'].min()) / (df_clean['pickup_datetime'].max() - df_clean['pickup_datetime'].min())
+    df_clean['pickup_datetime_ft'] = pd.to_datetime(df_clean['pickup_datetime']).astype('int64') // 10**9
+    df_clean['pickup_datetime_ft'] = (df_clean['pickup_datetime_ft'] - df_clean['pickup_datetime_ft'].min()) / (df_clean['pickup_datetime_ft'].max() - df_clean['pickup_datetime_ft'].min())
     
     # save the cleaned dataframe
     p("saving cleaned dataframe") if verbose else None
@@ -82,3 +82,17 @@ def get_test_data():
         return clean_data(test, 'test')
     else:
         return pd.read_csv(f"{data_path}/test_clean.csv")
+
+
+def get_clean_weather():
+    """loads in the NYC_Weather_2016_2022.csv and cleans it according
+    to the constants in config.py. Saves the cleaned dataframe as
+    weather_clean.csv
+    """
+    if not os.path.exists(f"{data_path}/weather_clean.csv"):
+        weather = pd.read_csv(f"{data_path}/NYC_Weather_2016_2022.csv")
+        weather['time'] = pd.to_datetime(weather['time'])
+        weather.to_csv(f"{data_path}/weather_clean.csv", index=False)
+        return weather
+    else:
+        return pd.read_csv(f"{data_path}/weather_clean.csv")
