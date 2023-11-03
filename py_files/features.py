@@ -1,5 +1,7 @@
 from config import features_toggle
+from py_files.data_manager import get_clean_weather
 import numpy as np
+import pandas as pd
 
 
 def distance(df):
@@ -43,6 +45,34 @@ def distance(df):
 
     return df
 
+def add_weather_feature(df):
+    """
+    Add weather-related features to a DataFrame by merging it with a weather dataset.
+
+    This function merges the input DataFrame with a weather dataset based on the rounded pickup time
+    and adds weather-related features to the DataFrame. It rounds the 'pickup_datetime' column to the
+    nearest hour to match the weather data's time resolution.
+
+    Parameters:
+    df (pandas.DataFrame): The input DataFrame containing pickup-related data.
+
+    Returns:
+    pandas.DataFrame: A DataFrame with added weather-related features merged from the weather dataset.
+    """
+    # Get weather data
+    weather = get_clean_weather()
+    
+    # Round the pickup time to the nearest hour (to merge with weather)
+    df['rounded_date'] = pd.to_datetime(df['pickup_datetime']).dt.round('H')
+    weather['time'] = pd.to_datetime(weather['time'])
+
+    # Merge with weather
+    df = df.merge(weather, how='left', left_on='rounded_date', right_on='time')
+
+    # Drop unnecessary columns and return the dataframe
+    df = df.drop(columns=['rounded_date', 'time'])
+    return df
+
 
 def generate_features(df):
     
@@ -55,6 +85,10 @@ def generate_features(df):
     # add the distance feature
     if features_toggle['distance']:
         feature_df = distance(feature_df)
+    
+    # add the weather feature
+    if features_toggle['weather']:
+        feature_df = add_weather_feature(feature_df)
     
     # return the feature dataframe
     return feature_df
