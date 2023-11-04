@@ -91,10 +91,18 @@ def get_clean_weather():
     to the constants in config.py. Saves the cleaned dataframe as
     weather_clean.csv
     """
-    if not os.path.exists(f"{data_path}/weather_clean.csv"):
+    if not os.path.exists(f"{data_path}/weather_clean1.csv"):
         weather = pd.read_csv(f"{data_path}/NYC_Weather_2016_2022.csv")
+        weather = weather.dropna()
         weather['time'] = pd.to_datetime(weather['time'])
-        weather.to_csv(f"{data_path}/weather_clean.csv", index=False)
+        weather = weather[weather['time'] <= '2016-07-01']
+        weather = weather.drop(columns=['rain (mm)', 
+                                        'cloudcover_low (%)', 
+                                        'cloudcover_mid (%)', 
+                                        'cloudcover_high (%)', 
+                                        'windspeed_10m (km/h)', 
+                                        'winddirection_10m (°)'])
+        weather.to_csv(f"{data_path}/weather_clean1.csv", index=False)
         return weather
     else:
-        return pd.read_csv(f"{data_path}/weather_clean.csv")
+        return pd.read_csv(f"{data_path}/weather_clean1.csv")
