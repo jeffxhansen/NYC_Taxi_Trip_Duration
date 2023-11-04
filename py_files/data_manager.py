@@ -7,11 +7,13 @@ from py_files.helper_funcs import p
 import os
 import numpy as np
 
+
 def clean_data(df, df_name, verbose=False):
     """loads in the train.csv and test.csv and cleans them according
     to the constants in config.py. Saves the cleaned dataframes as
     train_clean.csv and test_clean.csv
     """
+
     # only keep the relevant columns based on the config
     p("dropping columns") if verbose else None
     curr_cols_to_drop = [c for c in df.columns if c in cols_to_drop]
@@ -62,6 +64,7 @@ def get_train_data(force_clean=False):
     else:
         return pd.read_csv(f"{data_path}/train_clean.csv")
     
+
 def get_X_y(return_np=False, force_clean=False):
     """returns the X and y dataframes from a dataframe
     """
