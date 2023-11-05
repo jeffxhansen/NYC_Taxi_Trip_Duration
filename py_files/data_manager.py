@@ -1,16 +1,19 @@
 import pandas as pd
 from config import (
-    data_path, cols_to_drop, SET_VENDOR_ID_TO_01
+    data_path, cols_to_drop, SET_VENDOR_ID_TO_01, 
+    PICKUP_TIME_TO_NORMALIZED_FLOAT
 )
 from py_files.helper_funcs import p
 import os
 import numpy as np
+
 
 def clean_data(df, df_name, verbose=False):
     """loads in the train.csv and test.csv and cleans them according
     to the constants in config.py. Saves the cleaned dataframes as
     train_clean.csv and test_clean.csv
     """
+
     # only keep the relevant columns based on the config
     p("dropping columns") if verbose else None
     curr_cols_to_drop = [c for c in df.columns if c in cols_to_drop]
@@ -39,9 +42,10 @@ def clean_data(df, df_name, verbose=False):
     df_clean['pickup_hour_cos'] = np.cos(2 * np.pi * df_clean['pickup_hour'] / 24)
 
     # convert pickup and dropoff times to floats from 0 to 1
-    df_clean['pickup_datetime_ft'] = pd.to_datetime(df_clean['pickup_datetime']).astype('int64') // 10**9
-    df_clean['pickup_datetime_ft'] = (df_clean['pickup_datetime_ft'] - df_clean['pickup_datetime_ft'].min()) / (df_clean['pickup_datetime_ft'].max() - df_clean['pickup_datetime_ft'].min())
-    
+    if PICKUP_TIME_TO_NORMALIZED_FLOAT:
+        df_clean['pickup_datetime'] = pd.to_datetime(df_clean['pickup_datetime']).astype('int64') // 10**9
+        df_clean['pickup_datetime'] = (df_clean['pickup_datetime'] - df_clean['pickup_datetime'].min()) / (df_clean['pickup_datetime'].max() - df_clean['pickup_datetime'].min())
+        
     # save the cleaned dataframe
     p("saving cleaned dataframe") if verbose else None
     df_clean.to_csv(f"{data_path}/{df_name}_clean.csv", index=False)
@@ -60,6 +64,7 @@ def get_train_data(force_clean=False):
     else:
         return pd.read_csv(f"{data_path}/train_clean.csv")
     
+
 def get_X_y(return_np=False, force_clean=False):
     """returns the X and y dataframes from a dataframe
     """
@@ -89,10 +94,18 @@ def get_clean_weather():
     to the constants in config.py. Saves the cleaned dataframe as
     weather_clean.csv
     """
-    if not os.path.exists(f"{data_path}/weather_clean.csv"):
+    if not os.path.exists(f"{data_path}/weather_clean1.csv"):
         weather = pd.read_csv(f"{data_path}/NYC_Weather_2016_2022.csv")
+        weather = weather.dropna()
         weather['time'] = pd.to_datetime(weather['time'])
-        weather.to_csv(f"{data_path}/weather_clean.csv", index=False)
+        weather = weather[weather['time'] <= '2016-07-01']
+        weather = weather.drop(columns=['rain (mm)', 
+                                        'cloudcover_low (%)', 
+                                        'cloudcover_mid (%)', 
+                                        'cloudcover_high (%)', 
+                                        'windspeed_10m (km/h)', 
+                                        'winddirection_10m (°)'])
+        weather.to_csv(f"{data_path}/weather_clean1.csv", index=False)
         return weather
     else:
-        return pd.read_csv(f"{data_path}/weather_clean.csv")
+        return pd.read_csv(f"{data_path}/weather_clean1.csv")

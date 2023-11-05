@@ -5,6 +5,7 @@
 
 cols_to_drop = ['id', 'store_and_fwd_flag', 'dropoff_datetime']
 SET_VENDOR_ID_TO_01 = True
+PICKUP_TIME_TO_NORMALIZED_FLOAT = True
 
 #######################
 # FEATURES PARAMETERS
