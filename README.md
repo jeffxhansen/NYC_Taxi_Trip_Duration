@@ -2,13 +2,11 @@
 
 # Dataset link
 
-https://www.kaggle.com/competitions/nyc-taxi-trip-duration/overview
+[NYC Taxi Trip Duration](https://www.kaggle.com/competitions/nyc-taxi-trip-duration/overview)
 
-Weather:
-https://www.kaggle.com/datasets/aadimator/nyc-weather-2016-to-2022
+[Weather](https://www.kaggle.com/datasets/aadimator/nyc-weather-2016-to-2022)
 
-Google Distance:
-https://www.kaggle.com/datasets/debanjanpaul/new-york-city-taxi-trip-distance-matrix
+[Google Distance](https://www.kaggle.com/datasets/debanjanpaul/new-york-city-taxi-trip-distance-matrix)
 
 ## Research Question (Markdown)
 1. Why your question is interesting, well thought out, precisely formulated, and answerable with the data and machine learning
@@ -21,11 +19,15 @@ Why is this a good choice of data set to answer your research questions?
 What do you expect your analysis to reveal?
 What other interesting questions will analyzing this data answer?
 
+(1) The question we are considering for our project is: given basic information about your current situation, can you predict how long your taxi ride will be while in New York. The question of predicting taxi ride times in New York City is inherently intriguing and holds significant relevance for urban commuters and transportation systems. The research question is carefully crafted to explore the various factors that affect taxi ride times in cities, such as traffic patterns, congestion, time of day, and external elements like events or weather conditions. The careful crafting of the research question ensures a straightforward and measurable goal: predicting the anticipated duration of taxi rides. Having a clear and precise research question is essential for building models that can analyze extensive datasets containing historical taxi ride information and relevant factors. The availability of diverse data further strengthens the feasibility of answering the question, providing a solid foundation for training models to recognize patterns and make accurate predictions. The decision to use machine learning methods is fitting for addressing the intricacies of the problem, utilizing these techniques to capture detailed relationships within the data. Beyond individual convenience, predicting taxi ride times has practical implications for optimizing taxi fleet management, allocating resources efficiently, and improving overall traffic flow in the city. In summary, the research question is well-crafted and promising, offering valuable insights to enhance urban transportation efficiency and user experience through the use of data and machine learning.
+
+(2) Since our data comes from a Kaggle competition, over one thousand other groups have investigated this research. Successful teams performed feature engineering to create fields such as month, day, hour, day of the week, haversine/manhattan distances. The used techniques including Random Forest Regression, Extra Trees Regression, PCA, XGBoost, linear regression, and Light GBM. 
+
 (3, 4) The initial dataset comes from a Kaggle competition and a separate Kaggle dataset. The competition is to predict New York City taxi cab travel times from 2016 based primarily off of pick up and drop off locations and times. However, the dataset also includes fields for the tax driver, the number of passengers, and weather the trip time was recording in real time. The second dataset contains weather information for the same time period and is sourced directly from the Open Meteo website. The available fields include timestamps, temperature, precipitation, cloud cover, and wind information. The NYC taxi cab dataset is well documented and densely populated with over one million data points. It was published by NYC Taxi and Limousine Commission (TLC) in Big Query on Google Cloud Platform. The weather dataset is much more sparse, specially in the wind and cloud fields, and has a much larger time range than needed to match the NYC Taxi data. These datasets provide a good source for addressing our research questions because they extensively cover NYC taxi travel for a significant time period. By combining this taxi data with meteorological information, we can delve into various factors influencing trip duration in an urban landscape and employ machine learning techniques such as XGBoost. In short, the data allows us to effectively identify significant features impacting taxi trip duration and develop a robust predictive model for accurate estimations.
 
 (4) While our primary investigation is focused on determining taxi cab trip duration, we are also interested in several other questions. What dates, days of the week, and times of day are most busy? Where are the most popular destinations? What factors influence taxi trip time the most? (1) The fusion of NYC taxi data and meteorological information to understand factors influencing trip duration in a bustling metropolis offers a compelling inquiry into urban transportation dynamics. Furthermore, the multifaceted exploration of temporal, spatial, and environmental influences on travel durations in NYC, complemented by the weather dataset, presents a well-rounded analysis to reveal comprehensive insights into travel behaviors. Our data is well suited for our primary, precise research in exploring and predicting taxi trip duration, and has a single, clear answer. The dataset allows us to employ machine learning techniques like XGBoost to effectively identify and classify the significant features that impact taxi trip duration. This process helps us go one step further and develop a robust predictive model to estimate and understand trip durations accurately.
 
-(2) Since our data comes from a Kaggle competition, over one thousand other groups have investigated this research. Successful teams performed feature engineering to create fields such as month, day, hour, day of the week, haversine/manhattan distances. The used techniques including Random Forest Regression, Extra Trees Regression, PCA, XGBoost, linear regression, and Light GBM. 
+
 
 ## Data Cleaning / Feature Engineering (Code)
 1. Organize and format your data.
