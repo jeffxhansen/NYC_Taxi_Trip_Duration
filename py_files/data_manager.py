@@ -43,8 +43,8 @@ def clean_data(df, df_name, verbose=False):
 
     # convert pickup and dropoff times to floats from 0 to 1
     if PICKUP_TIME_TO_NORMALIZED_FLOAT:
-        df_clean['pickup_datetime'] = pd.to_datetime(df_clean['pickup_datetime']).astype('int64') // 10**9
-        df_clean['pickup_datetime'] = (df_clean['pickup_datetime'] - df_clean['pickup_datetime'].min()) / (df_clean['pickup_datetime'].max() - df_clean['pickup_datetime'].min())
+        df_clean['pickup_datetime_norm'] = pd.to_datetime(df_clean['pickup_datetime']).astype('int64') // 10**9
+        df_clean['pickup_datetime_norm'] = (df_clean['pickup_datetime_norm'] - df_clean['pickup_datetime_norm'].min()) / (df_clean['pickup_datetime_norm'].max() - df_clean['pickup_datetime_norm'].min())
         
     # save the cleaned dataframe
     p("saving cleaned dataframe") if verbose else None
@@ -109,3 +109,20 @@ def get_clean_weather():
         return weather
     else:
         return pd.read_csv(f"{data_path}/weather_clean1.csv")
+
+
+def get_google_distance():
+    """loads in the train_distance_matrix.csv and cleans it according
+    to the constants in config.py. Saves the cleaned dataframe as
+    google_distance_clean.csv
+    """
+    if not os.path.exists(f"{data_path}/google_distance_clean.csv"):
+        google_distance = pd.read_csv(f"{data_path}/train_distance_matrix.csv")
+
+        columns_to_keep = ['id', 'gc_distance', 'google_distance']
+        google_distance = google_distance[columns_to_keep]
+
+        google_distance.to_csv(f"{data_path}/google_distance_clean.csv", index=False)
+        return google_distance
+    else:
+        return pd.read_csv(f"{data_path}/google_distance_clean.csv")
