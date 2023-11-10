@@ -37,6 +37,9 @@ def clean_data(df, df_name, verbose=False):
     # Create a pickup period.
     df_clean['pickup_period'] = pd.cut(df_clean['pickup_hour'], bins=[-1, 6, 12, 18, 24], labels=['night', 'morning', 'afternoon', 'evening'])
 
+    # Get dummies for the pickup period.
+    df_clean = pd.get_dummies(df_clean, columns=['pickup_period'], drop_first=True)
+
     # Add cyclic data.
     df_clean['pickup_hour_sin'] = np.sin(2 * np.pi * df_clean['pickup_hour'] / 24)
     df_clean['pickup_hour_cos'] = np.cos(2 * np.pi * df_clean['pickup_hour'] / 24)
