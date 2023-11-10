@@ -15,7 +15,7 @@ PICKUP_TIME_TO_NORMALIZED_FLOAT = True
 features_toggle = {
     'distance': True,
     'weather': True,
-    'google_distance': True,
+    'google_distance': False,
 }
 
 #########
