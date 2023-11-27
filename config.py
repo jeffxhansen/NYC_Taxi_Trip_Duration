@@ -3,7 +3,7 @@
 # DATA CLEANING
 #################
 
-cols_to_drop = ['id', 'store_and_fwd_flag', 'dropoff_datetime']
+cols_to_drop = ['store_and_fwd_flag', 'dropoff_datetime']
 SET_VENDOR_ID_TO_01 = True
 PICKUP_TIME_TO_NORMALIZED_FLOAT = True
 
@@ -14,7 +14,8 @@ PICKUP_TIME_TO_NORMALIZED_FLOAT = True
 
 features_toggle = {
     'distance': True,
-    'weather': True
+    'weather': True,
+    'google_distance': False,
 }
 
 #########

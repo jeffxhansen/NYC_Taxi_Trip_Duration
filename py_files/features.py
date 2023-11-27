@@ -1,5 +1,5 @@
 from config import features_toggle
-from py_files.data_manager import get_clean_weather
+from py_files.data_manager import get_clean_weather, get_google_distance
 import numpy as np
 import pandas as pd
 
@@ -45,6 +45,7 @@ def distance(df):
 
     return df
 
+
 def add_weather_feature(df):
     """
     Add weather-related features to a DataFrame by merging it with a weather dataset.
@@ -67,10 +68,24 @@ def add_weather_feature(df):
     weather['time'] = pd.to_datetime(weather['time'])
 
     # Merge with weather
-    df = df.merge(weather, how='left', left_on='rounded_date', right_on='time')
+    df = df.merge(weather, left_on='rounded_date', right_on='time')
 
     # Drop unnecessary columns and return the dataframe
     df = df.drop(columns=['rounded_date', 'time'])
+    return df
+
+
+def add_google_distance(df):
+    """
+    Add Google Maps distance and duration features to a DataFrame by merging it with a Google Maps dataset.
+    """
+
+    # Get the google distance
+    google_distance = get_google_distance()
+
+    # Merge with the dataframe (verify 1:1)
+    df = df.merge(google_distance, on='id', validate='1:1')
+
     return df
 
 
@@ -89,6 +104,10 @@ def generate_features(df):
     # add the weather feature
     if features_toggle['weather']:
         feature_df = add_weather_feature(feature_df)
+
+    # add the google distance feature
+    if features_toggle['google_distance']:
+        feature_df = add_google_distance(feature_df)
     
     # return the feature dataframe
     return feature_df
