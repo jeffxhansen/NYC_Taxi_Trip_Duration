@@ -1,0 +1,11 @@
+{
+  "lat": {
+    "min": 40.49787800728235,
+    "max": 40.91510319260631
+  },
+  "lon": {
+    "min": -74.25495645300373,
+    "max": -73.70002020503291
+  },
+  "code_str": "\nnyc_df = pd.read_csv(f\"{data_path}/Centerline.csv\")\nnyc_df = nyc_df.loc[:, ['the_geom']]\n\n# Convert the \"the_geom\" column to Shapely geometries\nnyc_df['the_geom_geopandas'] = nyc_df['the_geom'].apply(loads)\n\n# Create a GeoDataFrame\ngdf = gpd.GeoDataFrame(nyc_df, geometry='the_geom_geopandas')\n\nmin_lon, min_lat, max_lon, max_lat = gdf['the_geom_geopandas'].total_bounds\n"
+}

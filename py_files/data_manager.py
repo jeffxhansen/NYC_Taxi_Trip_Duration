@@ -6,6 +6,7 @@ from config import (
 from py_files.helper_funcs import p
 import os
 import numpy as np
+import json
 
 
 def clean_data(df, df_name, verbose=False):
@@ -25,7 +26,25 @@ def clean_data(df, df_name, verbose=False):
         p("setting vendor_id to 0 or 1") if verbose else None
         df_clean['vendor_id'] = df_clean['vendor_id'] - 1
         p() if verbose else None
+
+    # Drop rows with trip duration < 60 seconds
+    p("dropping rows with trip duration < 60 seconds") if verbose else None
+    df_clean = df_clean[df_clean['trip_duration'] >= 60]
     
+    # Drop rows with outlier locations
+    p("dropping rows with outlier locations") if verbose else None
+    json_file_path = './misc/lat_long_bounds.json'
+    # Read in coordinates
+    with open(json_file_path, 'r') as json_file:
+        # Load the JSON data from the file
+        coords = json.load(json_file)
+    df_clean = df_clean[(df_clean['pickup_latitude'] >= coords['lat']['min']) & (df_clean['pickup_latitude'] <= coords['lat']['max'])]
+    df_clean = df_clean[(df_clean['pickup_longitude'] >= coords['lon']['min']) & (df_clean['pickup_longitude'] <= coords['lon']['max'])]
+
+    # Keep only <99.5% of trip duration
+    p("dropping rows with trip duration > 99.5%") if verbose else None
+    df_clean = df_clean[df_clean['trip_duration'] <= df_clean['trip_duration'].quantile(0.995)]
+
     # Split apart pickup_datetime
     df_clean['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'])
     df_clean['pickup_month'] = df_clean['pickup_datetime'].dt.month
