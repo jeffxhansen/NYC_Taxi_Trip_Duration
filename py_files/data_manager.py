@@ -45,7 +45,6 @@ def clean_data(df, df_name, verbose=False):
     p("dropping rows with trip duration > 99.5%") if verbose else None
     df_clean = df_clean[df_clean['trip_duration'] <= df_clean['trip_duration'].quantile(0.995)]
 
-    
     # Split apart pickup_datetime
     df_clean['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'])
     df_clean['pickup_month'] = df_clean['pickup_datetime'].dt.month
