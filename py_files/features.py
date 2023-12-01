@@ -90,7 +90,10 @@ def add_google_distance(df):
     return df
 
 
-def add_avg_cluster_duration(df):
+def add_avg_cluster_duration(df, y):
+    
+    df = df.copy()
+    df['trip_duration'] = y
     
     # load kmeans_pickup and kmeans_dropoff from the models folder using pickle
     with open("models/kmeans_200_pickup.pkl", "rb") as file:
@@ -120,12 +123,12 @@ def add_avg_cluster_duration(df):
 
     # fill the missing values with the mean of the average duration from cluster to cluster
     df['avg_cluster_duration'] = df['avg_cluster_duration'].fillna(df['avg_cluster_duration'].mean())
-    df.drop(columns=['pickup_200_cluster', 'dropoff_200_cluster'], inplace=True)
+    df.drop(columns=['pickup_200_cluster', 'dropoff_200_cluster', 'trip_duration'], inplace=True)
     
     return df
 
 
-def generate_features(df):
+def generate_features(df, y=None):
     
     # append the features to the dataframe
     feature_df = df
@@ -144,7 +147,10 @@ def generate_features(df):
         
     # add the avg_cluster_duration feature
     if features_toggle['avg_cluster_duration']:
-        feature_df = add_avg_cluster_duration(feature_df)
+        # check if y is None
+        if y is None:
+            raise Exception("y must be passed to generate_features if avg_cluster_duration is True")
+        feature_df = add_avg_cluster_duration(feature_df, y)
     
     # return the feature dataframe
     return feature_df
