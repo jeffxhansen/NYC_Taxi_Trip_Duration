@@ -84,6 +84,9 @@ def clean_data(df, df_name, verbose=False):
             df_clean['pickup_datetime']).view('int64') // 10**9
         df_clean['pickup_datetime_norm'] = (df_clean['pickup_datetime_norm'] - df_clean['pickup_datetime_norm'].min()) / (
             df_clean['pickup_datetime_norm'].max() - df_clean['pickup_datetime_norm'].min())
+    
+    # Drop the id column
+    df_clean = df_clean.drop(columns=['id'])
 
     # save the cleaned dataframe
     p("saving cleaned dataframe") if verbose else None
