@@ -1,12 +1,15 @@
 import pandas as pd
+import os
+import numpy as np
+import json
+import geopandas as gpd
+from shapely.wkt import loads
+
 from config import (
     data_path, cols_to_drop, SET_VENDOR_ID_TO_01,
     PICKUP_TIME_TO_NORMALIZED_FLOAT
 )
 from py_files.helper_funcs import p
-import os
-import numpy as np
-import json
 
 
 def clean_data(df, df_name, verbose=False):
@@ -42,6 +45,10 @@ def clean_data(df, df_name, verbose=False):
         df_clean['pickup_latitude'] <= coords['lat']['max'])]
     df_clean = df_clean[(df_clean['pickup_longitude'] >= coords['lon']['min']) & (
         df_clean['pickup_longitude'] <= coords['lon']['max'])]
+    df_clean = df_clean[(df_clean['dropoff_latitude'] >= coords['lat']['min']) & (
+        df_clean['dropoff_latitude'] <= coords['lat']['max'])]
+    df_clean = df_clean[(df_clean['dropoff_longitude'] >= coords['lon']['min']) & (
+        df_clean['dropoff_longitude'] <= coords['lon']['max'])]
 
     # Keep only <99.5% of trip duration
     p("dropping rows with trip duration > 99.5%") if verbose else None
@@ -159,3 +166,19 @@ def get_google_distance():
         return google_distance
     else:
         return pd.read_csv(f"{data_path}/google_distance_clean.csv")
+    
+    
+def get_nyc_gdf():
+    """loads in the NYC street centerline data and returns it as a
+    geopandas dataframe
+    """
+    nyc_df = pd.read_csv(f"{data_path}/Centerline.csv")
+    nyc_df = nyc_df.loc[:, ['the_geom']]
+
+    # Convert the "the_geom" column to Shapely geometries
+    nyc_df['the_geom_geopandas'] = nyc_df['the_geom'].apply(loads)
+
+    # Create a GeoDataFrame
+    gdf = gpd.GeoDataFrame(nyc_df, geometry='the_geom_geopandas')
+    
+    return gdf

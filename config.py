@@ -16,6 +16,7 @@ features_toggle = {
     'distance': True,
     'weather': True,
     'google_distance': False,
+    'avg_cluster_duration': True
 }
 
 #########

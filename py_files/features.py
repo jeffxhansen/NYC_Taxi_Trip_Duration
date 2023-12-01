@@ -2,6 +2,7 @@ from config import features_toggle
 from py_files.data_manager import get_clean_weather, get_google_distance
 import numpy as np
 import pandas as pd
+import pickle
 
 
 def distance(df):
@@ -89,10 +90,42 @@ def add_google_distance(df):
     return df
 
 
-def generate_features(df):
+def add_avg_cluster_duration(df):
     
-    # from the dataframe generate the features
+    # load kmeans_pickup and kmeans_dropoff from the models folder using pickle
+    with open("models/kmeans_200_pickup.pkl", "rb") as file:
+        kmeans_200_pickup = pickle.load(file)
+    with open("models/kmeans_200_dropoff.pkl", "rb") as file:
+        kmeans_200_dropoff = pickle.load(file)
+        
+    # predict the clusters for the pickup and dropoff locations using the kmeans_pickup and kmeans_dropoff
+    df['pickup_200_cluster'] = kmeans_200_pickup.predict(df[['pickup_longitude', 'pickup_latitude']].values)
+    df['dropoff_200_cluster'] = kmeans_200_dropoff.predict(df[['dropoff_longitude', 'dropoff_latitude']].values)
 
+    # get the centers
+    pickup_200_centers = kmeans_200_pickup.cluster_centers_
+    dropoff_200_centers = kmeans_200_dropoff.cluster_centers_
+
+    # compute the average duration from cluster to cluster
+    group_durations = (df
+        .groupby(['pickup_200_cluster', 'dropoff_200_cluster'])['trip_duration']
+        .mean()
+        .reset_index()
+        .rename(columns={'trip_duration': 'avg_cluster_duration'}))
+
+    # merge the average duration from cluster to cluster with the main dataframe
+    df = pd.merge(
+        left=df, right=group_durations, how='left',
+        left_on=['pickup_200_cluster', 'dropoff_200_cluster'], right_on=['pickup_200_cluster', 'dropoff_200_cluster'])
+
+    # fill the missing values with the mean of the average duration from cluster to cluster
+    df['avg_cluster_duration'] = df['avg_cluster_duration'].fillna(df['avg_cluster_duration'].mean())
+    df.drop(columns=['pickup_200_cluster', 'dropoff_200_cluster'], inplace=True)
+    
+    return df
+
+
+def generate_features(df):
     
     # append the features to the dataframe
     feature_df = df
@@ -108,6 +141,10 @@ def generate_features(df):
     # add the google distance feature
     if features_toggle['google_distance']:
         feature_df = add_google_distance(feature_df)
+        
+    # add the avg_cluster_duration feature
+    if features_toggle['avg_cluster_duration']:
+        feature_df = add_avg_cluster_duration(feature_df)
     
     # return the feature dataframe
     return feature_df
