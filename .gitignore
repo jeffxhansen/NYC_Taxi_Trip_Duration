@@ -8,6 +8,10 @@ data/*
 
 !data/.gitkeep
 
+models/rf_grid_search.pkl
+*.pkl
+models/rf_grid_search.pkl
+
 # Ignore .pyc files
 *.pyc
 
