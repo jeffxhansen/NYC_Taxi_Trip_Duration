@@ -1,5 +1,6 @@
 data/*.csv
 data/*.zip
+*.csv
 
 data/*.geojson
 
@@ -7,8 +8,13 @@ data/*
 
 !data/.gitkeep
 
+models/rf_grid_search.pkl
+*.pkl
+models/rf_grid_search.pkl
+
 # Ignore .pyc files
 *.pyc
 
 # Ignore __pycache__ directories
 __pycache__/
+.DS_Store
